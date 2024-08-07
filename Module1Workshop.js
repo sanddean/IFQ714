@@ -65,4 +65,4 @@ console.log(`Total cost for oranges: $${totalCostKiwi}`);
 
 console.log(`Overall total cost: $${overallTotalCost}`);
 
-//I cant commnit to git >"<
+//I cant commnit to git >"< aahhhhhhhhh
