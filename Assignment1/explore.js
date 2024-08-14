@@ -84,22 +84,38 @@ function findNEO_PHA(neoData, searchValue){
 
 // Measure the maximum orbit of a NEO
 function NEOMaxOrbit (neo){
-    return console.log(`Max orbit of the NEO [${neo.designation}] is: ${Math.max(neo.moid_au, neo.q_au_1, neo.q_au_2)} AUs`);
+    let maxOrbit = Math.max(neo.moid_au, neo.q_au_1, neo.q_au_2);
+    return maxOrbit;
 }
 // Test finding max orbit of a NEO
 //NEOMaxOrbit(neowise[1]);
+console.log(`Max orbit of the NEO [${neowise[1].designation}] is: ${NEOMaxOrbit(neowise[1])} AUs`);
 
 // Measure the minimum orbit of a NEO
 function NEOMinOrbit (neo){
-    return console.log(`Min orbit of the NEO [${neo.designation}] is: ${Math.min(neo.moid_au, neo.q_au_1, neo.q_au_2)} AUs`);
+    let minOrbit = Math.min(neo.moid_au, neo.q_au_1, neo.q_au_2);
+    return minOrbit;
 }
 // Test finding min orbit of a NEO
-//NEOMinOrbit(neowise[1]);
+console.log(`Min orbit of the NEO [${neowise[1].designation}] is: ${NEOMinOrbit(neowise[1])} AUs`);
 
 // Measure the average orbit of a NEO
 function NEOAverageOrbit (neo) {
     let averageOrbit = (neo.moid_au + neo.q_au_1 + neo.q_au_2) / 3;
-    return console.log(`Average orbit of the NEO [${neo.designation}] is: ${averageOrbit} AUs`);
+    return averageOrbit;
 }
 // Test calculate average orbit of a NEO
-NEOAverageOrbit(neowise[0]);
+//NEOAverageOrbit(neowise[0]);
+console.log(`Average orbit of the NEO [${neowise[1].designation}] is: ${NEOAverageOrbit(neowise[1])} AUs`);
+
+// Measure the maximum, minimum and average values for the orbits of NEOs of a certain class
+/*
+function MaxOrbitOfSameClassNEO (data, searchValue) {
+    //searchValue is orbit_class;
+    let arrayMaxOrbit = [];
+    for (let i = 0; i < neoData.length; i++)
+        if (neoData[i].orbit_class == searchValue){
+            arrayMaxOrbit.push(neo)
+         }
+}
+*/
