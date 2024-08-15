@@ -212,7 +212,7 @@ function AveOrbitOfSameClassNEO (data, searchValue) {
     
     // Display the NEO with max orbit in the same Orbit Class
     console.log('===================================================================');
-    console.log('The NEO with AVERAGE orbit in the same Orbit Class: ', searchValue ,' is: ', aveOrbitValue, 'AUs' );
+    console.log('The AVERAGE orbit value of all NEOs in the same Orbit Class: [', searchValue ,'] is: ', aveOrbitValue, 'AUs' );
     console.log('===================================================================');
 }
 AveOrbitOfSameClassNEO(neowise, 'Amor');
