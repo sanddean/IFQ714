@@ -71,7 +71,7 @@ function displayNEO_OrbitClass(neoData, searchValue){
         }
 }
 // Test finding NEO with orbit_class 'Halley-type Comet*'
-displayNEO_OrbitClass(neowise,'Halley-type Comet*');
+//displayNEO_OrbitClass(neowise,'Halley-type Comet*');
 
 // Finding NEO based on its PHA
 function findNEO_PHA(neoData, searchValue){
@@ -146,11 +146,11 @@ function MaxOrbitOfSameClassNEO (data, searchValue) {
     
     // Display the NEO with max orbit in the same Orbit Class
     console.log('===================================================================');
-    console.log('The NEO with MAX orbit in the same Orbit Class: ', searchValue);
+    console.log('The NEO with MAX orbit in the same Orbit Class: [', searchValue, '] has the MAX Orbit value: ', maxOrbitValue, ' AUs');
     console.log('===================================================================');
     displayNEOData(findNEO_Designation(neowise, result));  
 }
-MaxOrbitOfSameClassNEO(neowise, 'Halley-type Comet*');
+MaxOrbitOfSameClassNEO(neowise, 'Amor');
 
 function MinOrbitOfSameClassNEO (data, searchValue) {
     // Search all NEO with the same Orbit Class and add to an array
@@ -177,11 +177,11 @@ function MinOrbitOfSameClassNEO (data, searchValue) {
     
     // Display the NEO with max orbit in the same Orbit Class
     console.log('===================================================================');
-    console.log('The NEO with MIN orbit in the same Orbit Class: ', searchValue);
+    console.log('The NEO with MIN orbit in the same Orbit Class: [', searchValue, '] has the MIN orbit value: ', minOrbitValue, ' AUs');
     console.log('===================================================================');
     displayNEOData(findNEO_Designation(neowise, result));  
 }
-MinOrbitOfSameClassNEO(neowise, 'Halley-type Comet*');
+MinOrbitOfSameClassNEO(neowise, 'Amor');
 
 function AveOrbitOfSameClassNEO (data, searchValue) {
     // Search all NEO with the same Orbit Class and add to an array
@@ -215,4 +215,4 @@ function AveOrbitOfSameClassNEO (data, searchValue) {
     console.log('The NEO with AVERAGE orbit in the same Orbit Class: ', searchValue ,' is: ', aveOrbitValue, 'AUs' );
     console.log('===================================================================');
 }
-AveOrbitOfSameClassNEO(neowise, 'Halley-type Comet*');
+AveOrbitOfSameClassNEO(neowise, 'Amor');
