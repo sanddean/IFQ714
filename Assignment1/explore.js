@@ -38,13 +38,16 @@ function displayNEOData(neoData) {
     console.log('========================================================');
 }
 
-// Finding NEO based on its designation
+// Finding NEO based on its designation then return that NEO object
 function findNEO_Designation(neoData, searchValue) {
+    let tempNEO = [];
     neoData.forEach(element => {
         if (element.designation === searchValue) {
-            displayNEOData(element);
+            //displayNEOData(element);
+            tempNEO = element;
         }
     });
+    return tempNEO;
 }
 // Test Finding NEO with Designation '(2010 DM21)'
 //findNEO_Designation(neowise,'(2010 DM21)');
@@ -59,16 +62,16 @@ function displayAllNEODataInfo(neoData){
 // Testing display all NEO data
 //displayAllNEODataInfo(neowise);
 
-// Finding NEO based on its orbit_class
-function findNEO_OrbitClass(neoData, searchValue){
+// Display NEO based on its orbit_class
+function displayNEO_OrbitClass(neoData, searchValue){
     for (let i = 0; i < neoData.length; i++)
         if (neoData[i].orbit_class == searchValue){
             displayNEOIndex(i);
             displayNEOData(neoData[i]);
-         }
+        }
 }
 // Test finding NEO with orbit_class 'Halley-type Comet*'
-//findNEO_OrbitClass(neowise,'Halley-type Comet*');
+//displayNEO_OrbitClass(neowise,'Halley-type Comet*');
 
 // Finding NEO based on its PHA
 function findNEO_PHA(neoData, searchValue){
@@ -88,8 +91,7 @@ function NEOMaxOrbit (neo){
     return maxOrbit;
 }
 // Test finding max orbit of a NEO
-//NEOMaxOrbit(neowise[1]);
-console.log(`Max orbit of the NEO [${neowise[1].designation}] is: ${NEOMaxOrbit(neowise[1])} AUs`);
+//console.log(`Max orbit of the NEO [${neowise[1].designation}] is: ${NEOMaxOrbit(neowise[1])} AUs`);
 
 // Measure the minimum orbit of a NEO
 function NEOMinOrbit (neo){
@@ -97,7 +99,7 @@ function NEOMinOrbit (neo){
     return minOrbit;
 }
 // Test finding min orbit of a NEO
-console.log(`Min orbit of the NEO [${neowise[1].designation}] is: ${NEOMinOrbit(neowise[1])} AUs`);
+//console.log(`Min orbit of the NEO [${neowise[1].designation}] is: ${NEOMinOrbit(neowise[1])} AUs`);
 
 // Measure the average orbit of a NEO
 function NEOAverageOrbit (neo) {
@@ -105,17 +107,44 @@ function NEOAverageOrbit (neo) {
     return averageOrbit;
 }
 // Test calculate average orbit of a NEO
-//NEOAverageOrbit(neowise[0]);
-console.log(`Average orbit of the NEO [${neowise[1].designation}] is: ${NEOAverageOrbit(neowise[1])} AUs`);
+//console.log(`Average orbit of the NEO [${neowise[1].designation}] is: ${NEOAverageOrbit(neowise[1])} AUs`);
 
-// Measure the maximum, minimum and average values for the orbits of NEOs of a certain class
-/*
-function MaxOrbitOfSameClassNEO (data, searchValue) {
-    //searchValue is orbit_class;
-    let arrayMaxOrbit = [];
+// Find NEO based on its orbit_class then add to an array
+function findNEO_OrbitClass(neoData, searchValue){
+    let result = [];
     for (let i = 0; i < neoData.length; i++)
         if (neoData[i].orbit_class == searchValue){
-            arrayMaxOrbit.push(neo)
-         }
+            result.push(neoData[i]);
+        }
+    return result;
 }
-*/
+
+// Measure the maximum, minimum and average values for the orbits of NEOs of a certain class
+
+function MaxOrbitOfSameClassNEO (data, searchValue) {
+    // Search all NEO with the same Orbit Class and add to an array
+    let tempNEOs = findNEO_OrbitClass(data,searchValue);
+    
+    // 2D Array that hold NEO designation and Max orbit value
+    let tempNEO2Darray = [];
+    
+    // Calculate the max orbit value of each NEO in the array above
+    tempNEOs.forEach(element => {
+        // Add each Neo with its max orbit to an 2D array
+        tempNEO2Darray.push([element.designation, NEOMaxOrbit(element)]);
+    });
+    
+    // Compare all the Max orbit value then return the orbit designation
+    // Extract the second values of each sub-array
+    const secondValues = tempNEO2Darray.map(element => element[1]);
+
+    // Find the maximum value among the secondValues array
+    const maxOrbitValue = Math.max(...secondValues);
+    
+    // Find the NEO Designation that has the max orbit in the array
+    const result = tempNEO2Darray.find(element => element[1] === maxOrbitValue)[0]; // the [0] return the designation of the NEO in the 2D array
+    
+    // Display the NEO with max orbit in the same Orbit Class
+    displayNEOData(findNEO_Designation(neowise, result));  
+}
+MaxOrbitOfSameClassNEO(neowise, 'Halley-type Comet*');
