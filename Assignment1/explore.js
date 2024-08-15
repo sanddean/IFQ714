@@ -71,7 +71,7 @@ function displayNEO_OrbitClass(neoData, searchValue){
         }
 }
 // Test finding NEO with orbit_class 'Halley-type Comet*'
-//displayNEO_OrbitClass(neowise,'Halley-type Comet*');
+displayNEO_OrbitClass(neowise,'Halley-type Comet*');
 
 // Finding NEO based on its PHA
 function findNEO_PHA(neoData, searchValue){
@@ -145,6 +145,74 @@ function MaxOrbitOfSameClassNEO (data, searchValue) {
     const result = tempNEO2Darray.find(element => element[1] === maxOrbitValue)[0]; // the [0] return the designation of the NEO in the 2D array
     
     // Display the NEO with max orbit in the same Orbit Class
+    console.log('===================================================================');
+    console.log('The NEO with MAX orbit in the same Orbit Class: ', searchValue);
+    console.log('===================================================================');
     displayNEOData(findNEO_Designation(neowise, result));  
 }
 MaxOrbitOfSameClassNEO(neowise, 'Halley-type Comet*');
+
+function MinOrbitOfSameClassNEO (data, searchValue) {
+    // Search all NEO with the same Orbit Class and add to an array
+    let tempNEOs = findNEO_OrbitClass(data,searchValue);
+    
+    // 2D Array that hold NEO designation and Max orbit value
+    let tempNEO2Darray = [];
+    
+    // Calculate the max orbit value of each NEO in the array above
+    tempNEOs.forEach(element => {
+        // Add each Neo with its max orbit to an 2D array
+        tempNEO2Darray.push([element.designation, NEOMinOrbit(element)]);
+    });
+    
+    // Compare all the Max orbit value then return the orbit designation
+    // Extract the second values of each sub-array
+    const secondValues = tempNEO2Darray.map(element => element[1]);
+
+    // Find the minimum value among the secondValues array
+    const minOrbitValue = Math.min(...secondValues);
+    
+    // Find the NEO Designation that has the max orbit in the array
+    const result = tempNEO2Darray.find(element => element[1] === minOrbitValue)[0]; // the [0] return the designation of the NEO in the 2D array
+    
+    // Display the NEO with max orbit in the same Orbit Class
+    console.log('===================================================================');
+    console.log('The NEO with MIN orbit in the same Orbit Class: ', searchValue);
+    console.log('===================================================================');
+    displayNEOData(findNEO_Designation(neowise, result));  
+}
+MinOrbitOfSameClassNEO(neowise, 'Halley-type Comet*');
+
+function AveOrbitOfSameClassNEO (data, searchValue) {
+    // Search all NEO with the same Orbit Class and add to an array
+    let tempNEOs = findNEO_OrbitClass(data,searchValue);
+    
+    // 2D Array that hold NEO designation and Max orbit value
+    let tempNEO2Darray = [];
+    
+    // Calculate the max orbit value of each NEO in the array above
+    tempNEOs.forEach(element => {
+        // Add each Neo with its max orbit to an 2D array
+        tempNEO2Darray.push([element.designation, NEOAverageOrbit(element)]);
+    });
+    
+    // Compare all the Max orbit value then return the orbit designation
+    // Extract the second values of each sub-array
+    const secondValues = tempNEO2Darray.map(element => element[1]);
+
+    // Find the average value of the secondValues array
+    let sum = 0;
+    for (let i = 0; i < secondValues.length; i++){
+        sum += secondValues[i];
+    }
+    const aveOrbitValue = sum / secondValues.length;
+    
+    // Find the NEO Designation that has the max orbit in the array
+    //const result = tempNEO2Darray.find(element => element[1] === aveOrbitValue)[0]; // the [0] return the designation of the NEO in the 2D array
+    
+    // Display the NEO with max orbit in the same Orbit Class
+    console.log('===================================================================');
+    console.log('The NEO with AVERAGE orbit in the same Orbit Class: ', searchValue ,' is: ', aveOrbitValue, 'AUs' );
+    console.log('===================================================================');
+}
+AveOrbitOfSameClassNEO(neowise, 'Halley-type Comet*');
