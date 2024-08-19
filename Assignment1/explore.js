@@ -12,7 +12,7 @@ function displayNEOIndex(value){
     console.log('+------------------+');
 }
 /* Display NEO neoData in a readable format
-If the value availe then display the value otherwise display N/A
+If the value available then display the value otherwise display N/A
 */
 function displayNEOData(neoData) {
     console.log(`   + Designation: ${neoData.designation ? neoData.designation : 'N/A'} `);
@@ -119,7 +119,7 @@ function findNEO_OrbitClass(neoData, searchValue){
     return result;
 }
 
-// Measure the maximum, minimum and average values for the orbits of NEOs of a certain class
+// Measure the maximum orbit value of NEOs in the same orbit_class
 
 function MaxOrbitOfSameClassNEO (data, searchValue) {
     // Search all NEO with the same Orbit Class and add to an array
@@ -150,8 +150,10 @@ function MaxOrbitOfSameClassNEO (data, searchValue) {
     console.log('===================================================================');
     displayNEOData(findNEO_Designation(neowise, result));  
 }
+//Testing
 MaxOrbitOfSameClassNEO(neowise, 'Amor');
 
+// Measure the minimum orbit value of NEOs in the same orbit_class
 function MinOrbitOfSameClassNEO (data, searchValue) {
     // Search all NEO with the same Orbit Class and add to an array
     let tempNEOs = findNEO_OrbitClass(data,searchValue);
@@ -181,6 +183,7 @@ function MinOrbitOfSameClassNEO (data, searchValue) {
     console.log('===================================================================');
     displayNEOData(findNEO_Designation(neowise, result));  
 }
+//Testing
 MinOrbitOfSameClassNEO(neowise, 'Amor');
 
 function AveOrbitOfSameClassNEO (data, searchValue) {
@@ -215,4 +218,21 @@ function AveOrbitOfSameClassNEO (data, searchValue) {
     console.log('The AVERAGE orbit value of all NEOs in the same Orbit Class: [', searchValue ,'] is: ', aveOrbitValue, 'AUs' );
     console.log('===================================================================');
 }
+//Testing
 AveOrbitOfSameClassNEO(neowise, 'Amor');
+
+// Finding NEO based on its PHA and add it into an array
+function findNEO_PHA(neoData, searchValue){
+    let result = [];
+    for (let i = 0; i < neoData.length; i++) {
+        if (neoData[i].pha == searchValue) {
+            //displayNEOIndex(i);
+            //displayNEOData(neoData[i]);
+            result.push(neoData[i]);
+        }
+    }
+    return result;
+}
+// Test finding NEO according to its PHA
+//findNEO_PHA(neowise,null);
+
