@@ -67,19 +67,48 @@ function findNEO_Designation(neoData, searchValue) {
 
 // Measure the maximum orbit of a NEO
 function NEOMaxOrbit (neo){
-    let maxOrbit = Math.max(neo.moid_au, neo.q_au_1, neo.q_au_2);
+    //IF the orbit of the NEO is null then the value is 0
+    let maxOrbit = Math.max(neo.moid_au ? neo.moid_au : 0, neo.q_au_1 ? neo.q_au_1 : 0, neo.q_au_2 ? neo.q_au_2 : 0);
     return maxOrbit;
 }
 
 // Measure the minimum orbit of a NEO
 function NEOMinOrbit (neo){
-    let minOrbit = Math.min(neo.moid_au, neo.q_au_1, neo.q_au_2);
+    let minOrbit = 0;
+    //If the orbit value of the NEO is null then exclude it from the calculation
+    switch (true) {
+        case neo.moid_au == null:
+            minOrbit = Math.min(neo.q_au_1, neo.q_au_2);
+            break;
+        case neo.q_au_1 == null:
+            minOrbit = Math.min(neo.moid_au, neo.q_au_2);
+            break;
+        case neo.q_au_2 == null:
+            minOrbit = Math.min(neo.moid_au, neo.q_au_1);
+            break;
+        default:
+            minOrbit = Math.min(neo.moid_au, neo.q_au_1, neo.q_au_2);
+    }
     return minOrbit;
 }
 
 // Measure the average orbit of a NEO
 function NEOAverageOrbit (neo) {
-    let averageOrbit = (neo.moid_au + neo.q_au_1 + neo.q_au_2) / 3;
+    let averageOrbit = 0;
+    //If the orbit value of the NEO is null then exclude it from the calculation
+    switch (true) {
+        case neo.moid_au == null:
+            averageOrbit = (neo.q_au_1 + neo.q_au_2) / 2;
+            break;
+        case neo.q_au_1 == null:
+            averageOrbit = (neo.moid_au + neo.q_au_2) / 2;
+            break;
+        case neo.q_au_2 == null:
+            averageOrbit = (neo.moid_au + neo.q_au_1) / 2;
+            break;
+        default:
+            averageOrbit = (neo.moid_au + neo.q_au_1 + neo.q_au_2) / 3;
+    }
     return averageOrbit;
 }
 
@@ -147,10 +176,12 @@ function MaxOrbitOfSameClassNEO (data, searchValue) {
     console.log('The NEO with MAX orbit in the same Orbit Class: [', searchValue, '] has the MAX Orbit value: ', maxOrbitValue, ' AUs');
     console.log('===================================================================');
     displayNEOData(findNEO_Designation(neowise, result));  
+
+    return maxOrbitValue;
 }
 // Testing
-//let searchString = "Comet";
-//MaxOrbitOfSameClassNEO(neowise, searchString);
+    let searchString = "Encke-type Comet";
+    let tempMax = MaxOrbitOfSameClassNEO(neowise, searchString);
 
 // Measure the minimum orbit value of NEOs in the same orbit_class
 function MinOrbitOfSameClassNEO (data, searchValue) {
@@ -181,9 +212,11 @@ function MinOrbitOfSameClassNEO (data, searchValue) {
     console.log('The NEO with MIN orbit in the same Orbit Class: [', searchValue, '] has the MIN orbit value: ', minOrbitValue, ' AUs');
     console.log('===================================================================');
     displayNEOData(findNEO_Designation(neowise, result));  
+
+    return minOrbitValue;
 }
 // Testing
-//MinOrbitOfSameClassNEO(neowise, searchString);
+    let tempMin = MinOrbitOfSameClassNEO(neowise, searchString);
 
 // Measure the average orbit value of NEOs in the same orbit_class
 function AveOrbitOfSameClassNEO (data, searchValue) {
@@ -210,16 +243,18 @@ function AveOrbitOfSameClassNEO (data, searchValue) {
     }
     const aveOrbitValue = sum / secondValues.length;
     
-    // Find the NEO Designation that has the max orbit in the array
-    //const result = tempNEO2Darray.find(element => element[1] === aveOrbitValue)[0]; // the [0] return the designation of the NEO in the 2D array
-    
     // Display the NEO with max orbit in the same Orbit Class
     console.log('===================================================================');
     console.log('The AVERAGE orbit value of all NEOs in the same Orbit Class: [', searchValue ,'] is: ', aveOrbitValue, 'AUs' );
     console.log('===================================================================');
+
+    return aveOrbitValue;
+    
 }
-// Testing
-//AveOrbitOfSameClassNEO(neowise, searchString);
+
+// Display the NEO with max orbit in the same Orbit Class
+    let tempAve = AveOrbitOfSameClassNEO(neowise, searchString);
+
 
 // Step 4: Changing the JSON format
 
@@ -243,6 +278,27 @@ function rearrangedNEOs (neoData) {
 const rearrangedNEOdata = rearrangedNEOs(neowise);
 
 // Write the rearranged data to the new JSON file.
-fs.writeFileSync('Assignment1/Rearranged NEO Data.json', JSON.stringify(rearrangedNEOdata, null, 4));
+//fs.writeFileSync('Assignment1/Rearranged NEO Data.json', JSON.stringify(rearrangedNEOdata, null, 4));
+
+//Test function
+
+function addTwoNo (a, b){
+    let result = a + b;
+    return result;
+}
 
 //Export all functions to Test Case
+module.exports = {
+    displayNEOIndex,
+    displayNEOData,
+    findNEO_OrbitClass,
+    findNEO_Designation,
+    NEOMaxOrbit,
+    NEOMinOrbit,
+    NEOAverageOrbit,
+    MaxOrbitOfSameClassNEO,
+    MinOrbitOfSameClassNEO,
+    AveOrbitOfSameClassNEO,
+    rearrangedNEOs,
+    addTwoNo
+};
