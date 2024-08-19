@@ -14,6 +14,9 @@ function displayNEOIndex(value){
 /* Display NEO neoData in a readable format
 If the value available then display the value otherwise display N/A
 */
+// Export to Unit Test
+//module.exports = displayNEOIndex;
+
 function displayNEOData(neoData) {
     console.log(`   + Designation: ${neoData.designation ? neoData.designation : 'N/A'} `);
     console.log(`   + Discovery Date: ${neoData.discovery_date ? neoData.discovery_date : 'N/A'}`);
@@ -37,6 +40,7 @@ function displayNEOData(neoData) {
     console.log(`   + ORBIT CLASS: ${neoData.orbit_class ? neoData.orbit_class : 'N/A'}`);
     console.log('========================================================');
 }
+//module.exports = displayNEOData;
 
 // Find NEO based on its orbit_class then add to an array
 function findNEO_OrbitClass(neoData, searchValue){
@@ -47,6 +51,7 @@ function findNEO_OrbitClass(neoData, searchValue){
         }
     return result;
 }
+//module.exports = findNEO_OrbitClass;
 
 // Finding NEO based on its designation then return that NEO object
 function findNEO_Designation(neoData, searchValue) {
@@ -239,3 +244,5 @@ const rearrangedNEOdata = rearrangedNEOs(neowise);
 
 // Write the rearranged data to the new JSON file.
 fs.writeFileSync('Assignment1/Rearranged NEO Data.json', JSON.stringify(rearrangedNEOdata, null, 4));
+
+//Export all functions to Test Case
