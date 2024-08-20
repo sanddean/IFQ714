@@ -119,7 +119,7 @@ function NEOAverageOrbit (neo) {
     return averageOrbit;
 }
 
-// Step 3:
+// Step 3: Analysis
 // 3.1 Display information of all NEOs in the datasheet
 function displayAllNEODataInfo(neoData){
     for (let i = 0; i < neoData.length; i++) {
@@ -130,10 +130,10 @@ function displayAllNEODataInfo(neoData){
 // Testing display all NEO data
 //displayAllNEODataInfo(neowise);
 
-// 3.2.a Display information on NEOs data that have vertain criteria. Eg. Certain Orbit Class
+// 3.2.a Display information on NEOs data that have certain criteria. Eg. Certain Orbit Class
 function displayNEO_OrbitClass(neoData, searchValue){
     for (let i = 0; i < neoData.length; i++)
-        if (neoData[i].orbit_class == searchValue){
+        if (neoData[i].orbit_class== searchValue){
             displayNEOIndex(i);
             displayNEOData(neoData[i]);
         }
@@ -151,7 +151,7 @@ function displayNEO_PHA(neoData, searchValue){
     }
 }
 // Test display NEOs with PHA [true, false, null]
-//displayNEO_PHA(neowise,true);
+//displayNEO_PHA(neowise,null);
 
 // Measure the maximum orbit value of NEOs in the same orbit_class
 function MaxOrbitOfSameClassNEO (data, searchValue) {
@@ -196,17 +196,13 @@ function MaxOrbit_SameClassPHA (data, searchValue, searchValue2) {
 
     // Find max moid_au
     let all_moid_au = [];
-    // Add all H_mag to an array
+    // Add all moid_au to an array
     tempNEOs.forEach(element => {
         all_moid_au.push(element.moid_au);
     });
     let max_moid_au = Math.max(...all_moid_au);
     return max_moid_au;
 }
-let testClass = 'Apollo';
-let testPHA = true;
-let testresult = MaxOrbit_SameClassPHA(neowise, testClass, testPHA); // This return 0.049 AUs
-console.log(`Max H_mag of all NEOs in Apollo class that has a true PHA value is: ${testresult} AUs`);
 
 // Measure the minimum orbit value of NEOs in the same orbit_class
 function MinOrbitOfSameClassNEO (data, searchValue) {
@@ -248,18 +244,23 @@ function MinOrbit_SameClassPHA (data, searchValue, searchValue2) {
     // Search all NEO with the same Orbit Class and add to an array
     let tempNEOs = findNEO_OrbitClassPHA(data, searchValue, searchValue2);
 
-    // Find max h_mag
+    // Find max moid_au
     let all_moid_au = [];
-    // Add all H_mag to an array
+    // Add all moid_au to an array
     tempNEOs.forEach(element => {
         all_moid_au.push(element.moid_au);
     });
     let min_moid_au = Math.min(...all_moid_au);
     return min_moid_au;
 }
-
+/* Testing the updated functions to meet the assignment requirements
+let testClass = 'Apollo';
+let testPHA = true;
+let testresult = MaxOrbit_SameClassPHA(neowise, testClass, testPHA); // This return 0.049 AUs
+console.log(`Max Moid_au of all NEOs in Apollo class that has a true PHA value is: ${testresult} AUs`);
 let testresult2 = MinOrbit_SameClassPHA(neowise, testClass, testPHA); // This return 0.0002 AUs
-console.log(`Min H_mag of all NEOs in Apollo class that has a true PHA value is: ${testresult2} AUs`);
+console.log(`Min Moid_au of all NEOs in Apollo class that has a true PHA value is: ${testresult2} AUs`);
+*/
 
 // Measure the average orbit value of NEOs in the same orbit_class
 function AveOrbitOfSameClassNEO (data, searchValue) {
@@ -316,10 +317,10 @@ function rearrangedNEOs (neoData) {
     return tempNEOs;
 }
 // This 2D array will hold the rearranged Neo Data. The data is categorised based on the orbit_class.
-const rearrangedNEOdata = rearrangedNEOs(neowise);
+//const rearrangedNEOdata = rearrangedNEOs(neowise);
 
 // Write the rearranged data to the new JSON file.
-fs.writeFileSync('Assignment1/Rearranged NEO Data.json', JSON.stringify(rearrangedNEOdata, null, 4));
+//fs.writeFileSync('Assignment1/Rearranged NEO Data.json', JSON.stringify(rearrangedNEOdata, null, 4));
 
 //Export all functions to Test Case
 module.exports = {
