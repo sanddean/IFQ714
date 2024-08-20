@@ -8,7 +8,7 @@ const neowise = JSON.parse(data);
 // Display NEO index number
 function displayNEOIndex(value){
     console.log('+------------------+');
-    console.log('    NEO No: ', value+1,);
+    console.log('    NEO No: ', value);
     console.log('+------------------+');
 }
 /* Display NEO neoData in a readable format
@@ -21,44 +21,51 @@ function displayNEOData(neoData) {
     console.log(`   + Designation: ${neoData.designation ? neoData.designation : 'N/A'} `);
     console.log(`   + Discovery Date: ${neoData.discovery_date ? neoData.discovery_date : 'N/A'}`);
     console.log(`   + Observed Magnitude: ${neoData.h_mag ? neoData.h_mag : 'N/A'}`);
-    console.log(`   + Mininum Orbit Intersection Distance (MOID): ${neoData.moid_au ? neoData.moid_au : 'N/A'}`);
+    console.log(`   + Minimum Orbit Intersection Distance (MOID): ${neoData.moid_au ? neoData.moid_au : 'N/A'}`);
     console.log(`   + Perihelion Distance: ${neoData.q_au_1 ? neoData.q_au_1 : 'N/A'}`);
     console.log(`   + Aphelion Distance: ${neoData.q_au_2 ? neoData.q_au_2 : 'N/A'}`);
     console.log(`   + Orbital Period (year): ${neoData.period_yr ? neoData.period_yr : 'N/A'}`);
     console.log(`   + Orbital Inclination: ${neoData.i_deg ? neoData.i_deg : 'N/A'}`);
     switch (neoData.pha) {
         case true:
-            console.log('   + Potentially Hazardous Asteriod (PHA): YES');
+            console.log('   + Potentially Hazardous Asteroid (PHA): YES');
             break;
         case false:
-            console.log('   + Potentially Hazardous Asteriod (PHA): NO');
+            console.log('   + Potentially Hazardous Asteroid (PHA): NO');
             break;
         case null:
-            console.log('   + Potentially Hazardous Asteriod (PHA): N/A');
+            console.log('   + Potentially Hazardous Asteroid (PHA): N/A');
             break; 
     }
     console.log(`   + ORBIT CLASS: ${neoData.orbit_class ? neoData.orbit_class : 'N/A'}`);
     console.log('========================================================');
 }
-//module.exports = displayNEOData;
 
-// Find NEO based on its orbit_class then add to an array
-function findNEO_OrbitClass(neoData, searchValue){
+// Find NEO based on its orbit_class and PHA value then add to an array
+function findNEO_OrbitClassPHA(neoData, searchOrbitClass, searchPHA){
     let result = [];
     for (let i = 0; i < neoData.length; i++)
-        if (neoData[i].orbit_class == searchValue){
+        if (neoData[i].orbit_class == searchOrbitClass && neoData[i].pha == searchPHA){
             result.push(neoData[i]);
         }
     return result;
 }
-//module.exports = findNEO_OrbitClass;
+
+// Find NEO based on its orbit_class value then add to an array
+function findNEO_OrbitClass(neoData, searchOrbitClass){
+    let result = [];
+    for (let i = 0; i < neoData.length; i++)
+        if (neoData[i].orbit_class == searchOrbitClass){
+            result.push(neoData[i]);
+        }
+    return result;
+}
 
 // Finding NEO based on its designation then return that NEO object
 function findNEO_Designation(neoData, searchValue) {
     let tempNEO = [];
     neoData.forEach(element => {
         if (element.designation === searchValue) {
-            //displayNEOData(element);
             tempNEO = element;
         }
     });
@@ -116,7 +123,7 @@ function NEOAverageOrbit (neo) {
 // 3.1 Display information of all NEOs in the datasheet
 function displayAllNEODataInfo(neoData){
     for (let i = 0; i < neoData.length; i++) {
-        displayNEOIndex(i);
+        displayNEOIndex(i+1);
         displayNEOData(neoData[i]);
     }
 }
@@ -145,7 +152,6 @@ function displayNEO_PHA(neoData, searchValue){
 }
 // Test display NEOs with PHA [true, false, null]
 //displayNEO_PHA(neowise,true);
-
 
 // Measure the maximum orbit value of NEOs in the same orbit_class
 function MaxOrbitOfSameClassNEO (data, searchValue) {
@@ -180,24 +186,43 @@ function MaxOrbitOfSameClassNEO (data, searchValue) {
     return maxOrbitValue;
 }
 // Testing
-    let searchString = "Encke-type Comet";
-    let tempMax = MaxOrbitOfSameClassNEO(neowise, searchString);
+//    let searchString = "Encke-type Comet";
+//   let tempMax = MaxOrbitOfSameClassNEO(neowise, searchString);
+
+//Updated function MaxOrbit_SameClass_SamePHA
+function MaxOrbit_SameClassPHA (data, searchValue, searchValue2) {
+    // Search all NEO with the same Orbit Class and add to an array
+    let tempNEOs = findNEO_OrbitClassPHA(data, searchValue, searchValue2);
+
+    // Find max moid_au
+    let all_moid_au = [];
+    // Add all H_mag to an array
+    tempNEOs.forEach(element => {
+        all_moid_au.push(element.moid_au);
+    });
+    let max_moid_au = Math.max(...all_moid_au);
+    return max_moid_au;
+}
+let testClass = 'Apollo';
+let testPHA = true;
+let testresult = MaxOrbit_SameClassPHA(neowise, testClass, testPHA); // This return 0.049 AUs
+console.log(`Max H_mag of all NEOs in Apollo class that has a true PHA value is: ${testresult} AUs`);
 
 // Measure the minimum orbit value of NEOs in the same orbit_class
 function MinOrbitOfSameClassNEO (data, searchValue) {
     // Search all NEO with the same Orbit Class and add to an array
     let tempNEOs = findNEO_OrbitClass(data,searchValue);
     
-    // 2D Array that hold NEO designation and Max orbit value
+    // 2D Array that hold NEO designation and Min orbit value
     let tempNEO2Darray = [];
     
-    // Calculate the max orbit value of each NEO in the array above
+    // Calculate the min orbit value of each NEO in the array above
     tempNEOs.forEach(element => {
-        // Add each Neo with its max orbit to an 2D array
+        // Add each Neo with its min orbit to an 2D array
         tempNEO2Darray.push([element.designation, NEOMinOrbit(element)]);
     });
     
-    // Compare all the Max orbit value then return the orbit designation
+    // Compare all the Min orbit value then return the orbit designation
     // Extract the second values of each sub-array
     const secondValues = tempNEO2Darray.map(element => element[1]);
 
@@ -207,7 +232,7 @@ function MinOrbitOfSameClassNEO (data, searchValue) {
     // Find the NEO Designation that has the max orbit in the array
     const result = tempNEO2Darray.find(element => element[1] === minOrbitValue)[0]; // the [0] return the designation of the NEO in the 2D array
     
-    // Display the NEO with max orbit in the same Orbit Class
+    // Display the NEO with min orbit in the same Orbit Class
     console.log('===================================================================');
     console.log('The NEO with MIN orbit in the same Orbit Class: [', searchValue, '] has the MIN orbit value: ', minOrbitValue, ' AUs');
     console.log('===================================================================');
@@ -216,23 +241,41 @@ function MinOrbitOfSameClassNEO (data, searchValue) {
     return minOrbitValue;
 }
 // Testing
-    let tempMin = MinOrbitOfSameClassNEO(neowise, searchString);
+//    let tempMin = MinOrbitOfSameClassNEO(neowise, searchString);
+
+//Updated function MinOrbit_SameClass_SamePHA
+function MinOrbit_SameClassPHA (data, searchValue, searchValue2) {
+    // Search all NEO with the same Orbit Class and add to an array
+    let tempNEOs = findNEO_OrbitClassPHA(data, searchValue, searchValue2);
+
+    // Find max h_mag
+    let all_moid_au = [];
+    // Add all H_mag to an array
+    tempNEOs.forEach(element => {
+        all_moid_au.push(element.moid_au);
+    });
+    let min_moid_au = Math.min(...all_moid_au);
+    return min_moid_au;
+}
+
+let testresult2 = MinOrbit_SameClassPHA(neowise, testClass, testPHA); // This return 0.0002 AUs
+console.log(`Min H_mag of all NEOs in Apollo class that has a true PHA value is: ${testresult2} AUs`);
 
 // Measure the average orbit value of NEOs in the same orbit_class
 function AveOrbitOfSameClassNEO (data, searchValue) {
     // Search all NEO with the same Orbit Class and add to an array
     let tempNEOs = findNEO_OrbitClass(data,searchValue);
     
-    // 2D Array that hold NEO designation and Max orbit value
+    // 2D Array that hold NEO designation and average orbit value
     let tempNEO2Darray = [];
     
-    // Calculate the max orbit value of each NEO in the array above
+    // Calculate the average orbit value of each NEO in the array above
     tempNEOs.forEach(element => {
-        // Add each Neo with its max orbit to an 2D array
+        // Add each Neo with its average orbit to an 2D array
         tempNEO2Darray.push([element.designation, NEOAverageOrbit(element)]);
     });
     
-    // Compare all the Max orbit value then return the orbit designation
+    // Calculate the average orbit value then return the orbit designation
     // Extract the second values of each sub-array
     const secondValues = tempNEO2Darray.map(element => element[1]);
 
@@ -251,10 +294,8 @@ function AveOrbitOfSameClassNEO (data, searchValue) {
     return aveOrbitValue;
     
 }
-
 // Display the NEO with max orbit in the same Orbit Class
-    let tempAve = AveOrbitOfSameClassNEO(neowise, searchString);
-
+//    let tempAve = AveOrbitOfSameClassNEO(neowise, searchString);
 
 // Step 4: Changing the JSON format
 
@@ -265,27 +306,20 @@ function rearrangedNEOs (neoData) {
     // Go through each element of the JSON file 
     neoData.forEach(element => {
         let orbit_class = element.orbit_class;
-        // Create the new array to store the data if the paticular orbit class has not existed in the temp array yet
+        // Create the new array to store the data if the particular orbit class has not existed in the temp object yet
         if (!tempNEOs[orbit_class]) {
             tempNEOs[orbit_class] = [];
         }
-        //add the element to the correspoding array.
+        //add the element to the corresponding array.
         tempNEOs[orbit_class].push(element);
     });
     return tempNEOs;
 }
-// This 2D array will hold the reagrranged Neo Data. The data is categorised based on the orbit_class.
+// This 2D array will hold the rearranged Neo Data. The data is categorised based on the orbit_class.
 const rearrangedNEOdata = rearrangedNEOs(neowise);
 
 // Write the rearranged data to the new JSON file.
-//fs.writeFileSync('Assignment1/Rearranged NEO Data.json', JSON.stringify(rearrangedNEOdata, null, 4));
-
-//Test function
-
-function addTwoNo (a, b){
-    let result = a + b;
-    return result;
-}
+fs.writeFileSync('Assignment1/Rearranged NEO Data.json', JSON.stringify(rearrangedNEOdata, null, 4));
 
 //Export all functions to Test Case
 module.exports = {
@@ -299,6 +333,5 @@ module.exports = {
     MaxOrbitOfSameClassNEO,
     MinOrbitOfSameClassNEO,
     AveOrbitOfSameClassNEO,
-    rearrangedNEOs,
-    addTwoNo
+    rearrangedNEOs
 };
